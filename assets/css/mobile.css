@@ -1,0 +1,522 @@
+@media (max-width: 780px) {
+.site-nav .language-switch { display: none; }
+  .site-nav .mobile-language { display: inline; }
+  .header-resource { display: none; }
+  .mobile-expanded-description { display: grid; }
+  .mobile-expanded-description::before {
+    grid-area: 1 / 1;
+    content: attr(data-english);
+    visibility: hidden;
+  }
+  .mobile-expanded-description > span { grid-area: 1 / 1; }
+.desktop-only, .caption-title .desktop-only { display: none; }
+
+.caption-subtitle-desktop { display: none; }
+  .stage[data-view="hero"] .caption[data-project="convocatoria-abierta"] .caption-subtitle-original,
+  .stage[data-view="list"] .caption[data-project="convocatoria-abierta"] .caption-subtitle-original { display: none; }
+  .stage[data-view="hero"] .caption[data-project="convocatoria-abierta"] .caption-subtitle-overview,
+  .stage[data-view="list"] .caption[data-project="convocatoria-abierta"] .caption-subtitle-overview { display: inline; }
+
+:root { --gutter: 16px; }
+  .stage[data-view="hero"] { padding-top: 17vh; }
+  .caption, .stage[data-view="list"] .caption { position: absolute; top: 15vh; width: 45vw; }
+  .project-track { bottom: 12%; }
+  .stage[data-view="hero"] .project-track { bottom: var(--hero-track-bottom, 12%); }
+  .stage[data-view="list"] .project-track { width: min(48vw, 440px); margin-right: 8vw; }
+  .stage[data-view="project"] .project-card { top: 20%; width: min(60vw, 650px); }
+  .stage[data-view="project"] .caption { position: absolute; top: var(--gutter); width: 36vw; }
+  .detail-specs { right: var(--gutter); top: var(--gutter); width: min(32vw, 230px); }
+
+@media (max-width: 640px) {
+:root { --small: 11px; }
+  .site-header { align-items: flex-start; }
+  .site-nav > a:not(.mobile-info) { display: none; }
+  .site-nav .mobile-info { display: inline; }
+  body.is-in-project .site-header { display: flex; }
+  body.is-in-project .site-footer { display: block; }
+  .site-footer {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    display: block;
+    margin: 12vh var(--gutter) 0;
+    padding: 0 0 8vh;
+  }
+  .mobile-bio-header {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 28px;
+  }
+  .footer-bio {
+    display: block;
+    width: auto;
+    margin: 0 0 28px;
+  }
+  .mobile-footer-heading {
+    display: block;
+    margin: 0 0 12px;
+    font-size: 22px;
+    line-height: 1;
+  }
+  .footer-email {
+    position: static;
+    display: inline-block;
+    font-size: calc((100vw - 2 * var(--gutter)) / 14.42);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .footer-email .footer-arrow { font-family: "Inter Glyph", sans-serif; }
+  .footer-right { display: none; }
+  .stage,
+  .stage[data-view="hero"],
+  .stage[data-view="list"],
+  .stage[data-view="project"] {
+    min-height: 0;
+    overflow: visible;
+  }
+  .stage[data-view="hero"] { padding-top: 0; }
+  .stage[data-view="hero"] .project-card { aspect-ratio: 1200 / 1580; }
+  .caption { display: none; }
+  .project-track,
+  .stage[data-view="list"] .project-track,
+  .stage[data-view="project"] .project-track {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    display: flex;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    flex-direction: column;
+    gap: 24px !important;
+    margin: 72px var(--gutter) 0;
+    padding: 0;
+  }
+  .project-card,
+  .stage[data-view="list"] .project-card,
+  .stage[data-view="project"] .project-card {
+    position: relative;
+    top: auto;
+    left: auto;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1.2;
+    flex: none;
+    translate: none;
+  }
+  .stage[data-view="project"] .project-card.is-selected { display: block; }
+  .detail-back { display: none !important; }
+  .detail-specs,
+  .detail-copy .detail-credits { display: none; }
+  .stage[data-view="project"] .project-detail {
+    display: block;
+    width: 100%;
+    transform-origin: top left;
+  }
+  .detail-content { display: flex !important; flex-direction: column; }
+  .detail-gallery { order: 2; gap: 5vh; margin: 0; }
+  .stage[data-view="project"][data-project="food-route"] .detail-gallery { gap: 0; }
+  .detail-gallery figure,
+  .detail-gallery figure.is-narrow,
+  .detail-gallery figure.is-wide { width: 100%; }
+  .stage[data-view="project"][data-project="serenissima"] .detail-gallery figure:not(.is-panoramic) img,
+  .stage[data-view="project"][data-project="serenissima"] .detail-gallery figure:not(.is-panoramic) video,
+  .stage[data-view="project"][data-project="convocatoria-abierta"] .detail-gallery figure:not(.is-panoramic) img,
+  .stage[data-view="project"][data-project="convocatoria-abierta"] .detail-gallery figure:not(.is-panoramic) video,
+  .stage[data-view="project"][data-project="humh"] .detail-gallery figure:not(.is-panoramic) img,
+  .stage[data-view="project"][data-project="humh"] .detail-gallery figure:not(.is-panoramic) video {
+    width: 100%;
+    margin-inline: 0;
+  }
+  .stage[data-view="project"][data-project="serenissima"] .detail-gallery figure.is-panoramic,
+  .stage[data-view="project"][data-project="humh"] .detail-gallery figure.is-panoramic,
+  .stage[data-view="project"][data-project="convocatoria-abierta"] .detail-gallery figure.is-panoramic {
+    transform: scale(1.6);
+    transform-origin: top center;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .stage[data-view="project"][data-project="dish-list"] .detail-gallery figure:not(.is-panoramic) {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  .stage[data-view="project"][data-project="humh"] .detail-gallery figure:first-child {
+    padding-block: 5vh;
+  }
+  .stage[data-view="project"][data-project="humh"] .detail-gallery figure.is-scrollable {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .stage[data-view="project"][data-project="humh"] .detail-gallery img[src*="Project-Humh-02.webp"],
+  .stage[data-view="project"][data-project="humh"] .detail-gallery img[src*="Project-Humh-03.webp"],
+  .stage[data-view="project"][data-project="humh"] .detail-gallery img[src*="Project-Humh-07.webp"],
+  .stage[data-view="project"][data-project="humh"] .detail-gallery img[src*="Project-Humh-08.webp"] {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+  }
+  .stage[data-view="project"][data-project="humh"] .detail-gallery img[src*="Humh-animazione.gif"] {
+    width: 40%;
+    margin-inline: auto;
+  }
+  .stage[data-view="project"][data-project="humh"] .detail-gallery figure.is-panoramic img {
+    width: 224%;
+    max-width: none;
+  }
+  .stage[data-view="project"][data-project="humh"] .detail-gallery figure.is-panoramic:has(img[src*="Project-Humh-04.webp"]) img {
+    width: 280%;
+  }
+  .stage[data-view="project"][data-project="convocatoria-abierta"] .detail-gallery figure:nth-child(10).is-panoramic img {
+    width: 171%;
+    max-width: none;
+  }
+  .stage[data-view="project"][data-project="serenissima"] .detail-gallery figure.is-panoramic img,
+  .stage[data-view="project"][data-project="convocatoria-abierta"] .detail-gallery figure.is-panoramic img {
+    width: 224%;
+    max-width: none;
+  }
+  .stage[data-view="project"][data-project="food-route"] .detail-gallery .panorama-window {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .stage[data-view="project"][data-project="food-route"] .detail-gallery figure.is-panoramic img {
+    width: 306%;
+    max-width: none;
+  }
+
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure:not(.is-panoramic) img,
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure:not(.is-panoramic) video,
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:not(.is-panoramic) img,
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:not(.is-panoramic) video,
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure:not(.is-panoramic) img,
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure:not(.is-panoramic) video {
+    width: 100% !important;
+    margin-inline: 0 !important;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Project-Humh-02.webp"],
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Project-Humh-03.webp"],
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Project-Humh-07.webp"],
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Project-Humh-08.webp"] {
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0 !important;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Humh-animazione.gif"] {
+    width: 32% !important;
+    margin-inline: auto !important;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure.is-panoramic img {
+    width: 306% !important;
+    max-width: none !important;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure.is-panoramic:has(img[src*="Project-Humh-04.webp"]) img {
+    width: 397.8% !important;
+  }
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:nth-child(10).is-panoramic img {
+    width: 306% !important;
+    max-width: none !important;
+  }
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure.is-panoramic img,
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure.is-panoramic img,
+  .mobile-expanded-project[data-project="food-route"] .mobile-overlay-figure.is-panoramic img {
+    width: 306% !important;
+    max-width: none !important;
+  }
+  .detail-gallery .todo-panel { min-height: 90vw; }
+  .detail-copy {
+    position: static;
+    order: 1;
+    display: block;
+    width: auto;
+    margin: 24px 0;
+  }
+  .detail-copy > * { max-width: none; text-align: left; }
+}
+
+:root {
+    --padding: 10px;
+    --background: var(--paper);
+  }
+
+  .stage[data-view="hero"],
+  .stage[data-view="list"] {
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .stage[data-view="hero"] { padding-top: 0; }
+  .site-header { position: fixed; mix-blend-mode: difference; }
+  .site-name, .site-nav { font-size: calc(var(--small) + 4pt); }
+  .site-name { display: flex; align-items: center; }
+  .site-name-text { display: none; }
+  .site-name-logo { display: block; width: auto; height: 1.75em; filter: invert(1); }
+  .site-nav > a:not(.mobile-info) { display: none; }
+  .site-nav .mobile-info { display: inline; }
+  .site-footer {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    display: block;
+    margin: 12vh var(--gutter) 0;
+    padding: 0 0 var(--padding);
+  }
+  .footer-bio {
+    display: block;
+    width: auto;
+    margin: 0 0 28px;
+    font-size: 22px;
+    line-height: 1;
+    white-space: normal;
+  }
+  .mobile-bio-break { display: inline; }
+  .mobile-footer-heading { display: block; margin: 0 0 4px; line-height: 1; }
+  .footer-email {
+    position: static;
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    line-height: 1;
+    text-align: right;
+  }
+  .footer-right { display: flex; justify-content: center; margin-top: 8vh; }
+  .footer-right > span { display: none; }
+  .footer-bio, .footer-copy { font-size: calc(var(--small) + 4pt); }
+  .mobile-footer-heading, .footer-email { font-size: calc((100vw - 2 * var(--gutter)) / 28.84); }
+  .footer-email { white-space: nowrap; }
+  .stage[data-view="hero"] .caption,
+  .stage[data-view="list"] .caption { display: none; }
+
+  .stage[data-view="hero"] .project-track,
+  .stage[data-view="list"] .project-track {
+    position: relative;
+    inset: auto;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: calc(2 * var(--padding) + 1.15em + 12.25px) 0 0;
+  }
+  body.is-mobile-project-open .stage[data-view="hero"] .project-track,
+  body.is-mobile-project-open .stage[data-view="list"] .project-track {
+    padding-top: max(calc(2 * var(--padding) + 1.15em + 12.25px), calc((100svh - 125vw) / 2 + 12.25px));
+    padding-bottom: max(0px, calc((100svh - 125vw) / 2));
+  }
+
+  .stage[data-view="hero"] .project-card,
+  .stage[data-view="list"] .project-card {
+    position: relative;
+    display: grid;
+    grid-template-areas: "artwork" "title";
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    aspect-ratio: auto;
+    flex: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: var(--background);
+    translate: none;
+  }
+
+  .stage[data-view="hero"] .project-card::before,
+  .stage[data-view="list"] .project-card::before {
+    grid-area: artwork;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    content: "";
+  }
+
+  .stage[data-view="hero"] .project-card img,
+  .stage[data-view="list"] .project-card img {
+    display: block;
+    grid-area: artwork;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    opacity: 1;
+    transition: none;
+  }
+  .stage[data-view="hero"] .project-card:not([data-slug="humh"]) .hero-artwork {
+    position: static;
+    align-self: end;
+  }
+
+  .stage[data-view="hero"] .project-card:hover img,
+  .stage[data-view="list"] .project-card:hover img { transform: none; }
+
+  .stage[data-view="hero"] .project-card[data-slug="serenissima"] .hero-artwork,
+  .stage[data-view="list"] .project-card[data-slug="serenissima"] .hero-artwork,
+  .stage[data-view="hero"] .project-card[data-slug="convocatoria-abierta"] .hero-artwork,
+  .stage[data-view="list"] .project-card[data-slug="convocatoria-abierta"] .hero-artwork {
+    position: static;
+    align-self: end;
+    height: 70%;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+  .stage[data-view="hero"] .project-card[data-slug="serenissima"] .hero-artwork,
+  .stage[data-view="list"] .project-card[data-slug="serenissima"] .hero-artwork { height: 75%; }
+  .stage[data-view="hero"] .project-card[data-slug="food-route"] .hero-artwork,
+  .stage[data-view="list"] .project-card[data-slug="food-route"] .hero-artwork {
+    position: static;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .mobile-project-title-row {
+    grid-area: title;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 12px var(--gutter) 32px;
+    font-size: calc(var(--small) + 4pt);
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: left;
+    pointer-events: none;
+  }
+  .stage[data-view="hero"] .project-card[data-slug="food-route"] .mobile-project-title-row,
+  .stage[data-view="list"] .project-card[data-slug="food-route"] .mobile-project-title-row {
+    margin-top: -13vw;
+  }
+  .mobile-project-collaborators { font-weight: 400; }
+
+  .detail-back { display: none !important; }
+
+  .mobile-expanded-project {
+    display: grid;
+    width: 100%;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .85s var(--ease);
+  }
+  .mobile-expanded-project.is-expanded { grid-template-rows: 1fr; }
+  .mobile-expanded-inner { min-height: 0; overflow: hidden; }
+  .mobile-expanded-project[data-project="food-route"].is-expanded.is-settled .mobile-expanded-inner {
+    overflow: visible;
+  }
+  .mobile-overlay-gallery { display: block; width: 100%; }
+  .mobile-overlay-figure { position: relative; width: 100%; margin: 0; }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure:first-child {
+    padding-block: 5vh;
+  }
+  .mobile-overlay-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .mobile-overlay-figure video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .mobile-overlay-figure.is-scrollable {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .mobile-overlay-figure.is-scrollable img {
+    width: 120%;
+    max-width: none;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure:not(.is-panoramic) img,
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure:not(.is-panoramic) video {
+    width: 80%;
+    margin-inline: auto;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Project-Humh-04.webp"] {
+    clip-path: inset(0 0 0 10px);
+    translate: -5px 0;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Project-Humh-06.webp"] {
+    clip-path: inset(10px 0 0);
+    translate: 0 -5px;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure img[src*="Humh-animazione.gif"] {
+    width: 32%;
+    margin-inline: auto;
+  }
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure:not(.is-panoramic) img,
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:not(.is-panoramic) img {
+    width: 100%;
+  }
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure:nth-child(4) img,
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:nth-child(4) img {
+    clip-path: inset(0 0 0 10px);
+    transform: translateX(-5px);
+  }
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:nth-child(6) img {
+    clip-path: inset(10px 0 0);
+    transform: translateY(-5px);
+  }
+  .mobile-overlay-figure.is-panoramic {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .mobile-overlay-figure.is-panoramic img { max-width: none; }
+  .mobile-expanded-project[data-project="dish-list"] .mobile-overlay-figure.is-panoramic img {
+    width: 288%;
+  }
+  .mobile-expanded-project[data-project="entre-panes"] .mobile-overlay-figure.is-panoramic img {
+    width: 288%;
+  }
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure.is-panoramic img {
+    width: 269%;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure.is-panoramic img {
+    width: 224%;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure.is-panoramic:has(img[src*="Project-Humh-04.webp"]) img {
+    width: 364%;
+  }
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure.is-panoramic img {
+    width: 224%;
+  }
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:nth-child(10).is-panoramic img {
+    width: 240%;
+  }
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure:has(img[src*="Porject-Serenissima03.webp"]) {
+    scrollbar-width: none;
+  }
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure:has(img[src*="Porject-Serenissima03.webp"])::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure:has(img[src*="Porject-Serenissima04.webp"]) {
+    overflow: hidden;
+  }
+  .mobile-expanded-project[data-project="serenissima"] img[src*="Porject-Serenissima04.webp"] {
+    margin-top: -5px;
+  }
+  .mobile-expanded-project[data-project="convocatoria-abierta"] .mobile-overlay-figure:has(img[src*="Project-ConvocatoriaAbierta06.webp"]) {
+    margin-bottom: -5px;
+  }
+  .mobile-expanded-project[data-project="humh"] video[src*="Project-HUMH_Video2.mp4"] {
+    translate: 0 -30px;
+  }
+  .mobile-expanded-project[data-project="humh"] .mobile-overlay-figure:has(img[src*="Humh-animazione.gif"]) {
+    margin-top: 30px;
+  }
+  .mobile-expanded-project[data-project="food-route"] img[src*="Project-FoodRoute01.webp"] {
+    translate: 0 -30px;
+  }
+  .mobile-expanded-project[data-project="food-route"] img[src*="Project-FoodRoute10.webp"] {
+    width: 40%;
+    margin-inline: auto;
+  }
+
+  .mobile-expanded-meta {
+    padding: calc(1.1em + 2 * var(--padding)) var(--padding) var(--padding);
+    font-size: calc(var(--small) + 4pt);
+  }
+
+  .mobile-expanded-description {
+    margin: 0;
+  }
+  .mobile-expanded-meta p + p { margin: 1em 0 0; }
+
+}
