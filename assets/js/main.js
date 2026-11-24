@@ -287,6 +287,7 @@ function hideContact() {
   heroContact.classList.remove("is-visible");
   heroContact.setAttribute("aria-hidden", "true");
   heroContact.inert = true;
+  updateHeroLayout();
 }
 
 function showContact() {
@@ -294,6 +295,7 @@ function showContact() {
   heroContact.inert = false;
   heroContact.setAttribute("aria-hidden", "false");
   heroContact.classList.add("is-visible");
+  updateHeroLayout();
   contactTimer = window.setTimeout(hideContact, 60000);
 }
 
@@ -391,6 +393,9 @@ document.addEventListener("error", (event) => {
   media.src = localMediaUrl(media.dataset.assetSource);
   delete media.dataset.assetSource;
 }, true);
+
+const headerLogo = document.querySelector(".header-resource img");
+setMediaSource(headerLogo, headerLogo.dataset.assetSource);
 
 function makeMobileProjectImage(item, project, index) {
   const figure = document.createElement("figure");
@@ -571,21 +576,32 @@ function updateMobileInfo() {
 }
 
 let heroLayoutFrame;
-function updateHeroTrackPosition() {
+function positionWideHeroTrack() {
+  if (mobileLayout.matches || stage.dataset.view !== "hero"
+      || getComputedStyle(stage).display === "flex") return;
+  const lines = [...caption.querySelectorAll(".caption-line")]
+    .filter((line) => getComputedStyle(line).display !== "none");
+  const captionBottom = parseFloat(getComputedStyle(caption).top)
+    + lines[lines.length - 1].getBoundingClientRect().bottom - caption.getBoundingClientRect().top;
+  const bioTop = document.querySelector(".footer-bio").getBoundingClientRect().top;
+  const trackHeight = track.getBoundingClientRect().height;
+  const trackTop = (captionBottom + bioTop - trackHeight) / 2;
+  track.style.setProperty("--hero-track-bottom", `${stage.getBoundingClientRect().height - trackTop - trackHeight}px`);
+}
+
+function updateHeroLayout() {
   cancelAnimationFrame(heroLayoutFrame);
   heroLayoutFrame = requestAnimationFrame(() => {
     if (mobileLayout.matches || stage.dataset.view !== "hero") return;
-    const lines = [...caption.querySelectorAll(".caption-line")]
-      .filter((line) => getComputedStyle(line).display !== "none");
-    const lastLine = lines[lines.length - 1];
-    const bio = document.querySelector(".footer-bio");
-    const captionBottom = parseFloat(getComputedStyle(caption).top)
-      + lastLine.getBoundingClientRect().bottom - caption.getBoundingClientRect().top;
-    const bioTop = bio.getBoundingClientRect().top;
-    const trackHeight = track.getBoundingClientRect().height;
-    const trackTop = (captionBottom + bioTop - trackHeight) / 2;
-    const stageHeight = stage.getBoundingClientRect().height;
-    track.style.setProperty("--hero-track-bottom", `${stageHeight - trackTop - trackHeight}px`);
+    heroContact.classList.remove("has-service-collision");
+    const emailRight = heroContact.querySelector(".contact-email").getBoundingClientRect().right;
+    const servicesLeft = heroContact.querySelector("p").getBoundingClientRect().left;
+    heroContact.classList.toggle("has-service-collision", emailRight + 24 > servicesLeft);
+    const clearance = heroContact.classList.contains("is-visible")
+      ? parseFloat(getComputedStyle(heroContact).top) + heroContact.getBoundingClientRect().height + 24
+      : 0;
+    stage.style.setProperty("--hero-contact-clearance", `${clearance}px`);
+    positionWideHeroTrack();
   });
 }
 
@@ -622,6 +638,7 @@ function updateCaption(project, animate = true) {
   }
   caption.querySelector("#caption-credit").textContent = project.credits;
   cards.forEach((card) => card.classList.toggle("is-current", card.dataset.slug === project.slug));
+  updateHeroLayout();
   if (animate && !reducedMotion.matches) {
     requestAnimationFrame(() => requestAnimationFrame(() => caption.classList.remove("is-changing")));
   }
@@ -844,7 +861,7 @@ function setLanguage(nextLanguage) {
     ? projects.find((project) => project.slug === mobileExpandedCard.dataset.slug)
     : projects.find((project) => project.slug === stage.dataset.project);
   updateDocument(currentProject, currentProject ? "project" : stage.dataset.view);
-  updateHeroTrackPosition();
+  updateHeroLayout();
 }
 
 function playFlip(before, duration = 850) {
@@ -966,7 +983,7 @@ function setRoute(path, options = {}) {
       }
     }
     updateDocument(route.project, route.view);
-    updateHeroTrackPosition();
+    updateHeroLayout();
     updatePanorama();
     if (revealContact && route.view === "hero" && desktopContact.matches) showContact();
     if (captionStart) {
@@ -1182,13 +1199,13 @@ window.addEventListener("popstate", () => {
 
 window.addEventListener("resize", () => {
   updatePanorama();
-  updateHeroTrackPosition();
+  updateHeroLayout();
   updateMobileInfo();
 });
-const heroLayoutObserver = new ResizeObserver(updateHeroTrackPosition);
+document.fonts.ready.then(updateHeroLayout);
+const heroLayoutObserver = new ResizeObserver(positionWideHeroTrack);
 heroLayoutObserver.observe(track);
 heroLayoutObserver.observe(document.querySelector(".footer-bio"));
-document.fonts.ready.then(updateHeroTrackPosition);
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && stage.dataset.view === "project") {

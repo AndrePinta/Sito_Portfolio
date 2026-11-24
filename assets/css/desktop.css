@@ -77,7 +77,7 @@ body:has(.stage[data-view="list"]) .footer-right > span { display: none; }
 .stage[data-view="hero"] .hero-contact {
     position: absolute;
     z-index: 6;
-    top: 12.8vh;
+    top: max(calc(var(--gutter) + 43.125px + 24px), 12.8vh);
     right: var(--gutter);
     left: var(--gutter);
     display: grid;
@@ -627,4 +627,92 @@ body.is-in-project,
   }
   .stage[data-view="project"] .detail-specs { max-width: min(51.4vw, 630px); }
 }
+
+  .stage[data-view="hero"] .hero-contact.has-service-collision {
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 24px;
+  }
+  .stage[data-view="hero"] .hero-contact.has-service-collision > p {
+    min-width: 0;
+    font-size: 85%;
+    line-height: .94;
+    white-space: normal;
+  }
+  @media (max-width: 1200px), (max-height: 800px) {
+    .portfolio-layout:has(.stage[data-view="hero"]) {
+      display: flex;
+      min-height: 100svh;
+      flex-direction: column;
+    }
+    .stage[data-view="hero"] {
+      --hero-section-gap: 72px;
+      display: flex;
+      min-height: auto;
+      flex: 1 0 auto;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-top: max(calc(var(--gutter) + 43.125px + 24px), var(--hero-contact-clearance, 0px));
+      padding-bottom: var(--hero-section-gap);
+    }
+    .stage[data-view="hero"] .caption {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: auto;
+      min-height: 0;
+      flex: none;
+      margin: 0 var(--gutter) var(--hero-section-gap);
+    }
+    .stage[data-view="hero"] #caption-subtitle,
+    .stage[data-view="hero"] .caption-subtitle-desktop {
+      white-space: normal;
+      text-wrap: pretty;
+    }
+    .stage[data-view="hero"] .project-track {
+      position: relative;
+      inset: auto;
+      width: calc(100% - 2 * (var(--gutter) - 2px) + (100vw - 7 * (var(--gutter) - 2px)) * .03684);
+      margin-left: calc(var(--gutter) - 2px);
+      flex: none;
+    }
+    body:has(.stage[data-view="hero"]) .site-footer {
+      position: relative;
+      inset: auto;
+      display: grid;
+      flex: none;
+      margin: 0 var(--gutter) var(--gutter);
+      grid-template-columns: minmax(0, 1fr) max-content;
+      grid-template-rows: auto minmax(8px, 1fr) auto minmax(8px, 1fr) auto;
+      column-gap: clamp(24px, 4vw, 48px);
+      align-items: end;
+    }
+    body:has(.stage[data-view="hero"]) .footer-bio {
+      grid-area: 1 / 1 / 6 / 2;
+      width: min(100%, 560px);
+      text-wrap: pretty;
+    }
+    body:has(.stage[data-view="hero"]) .footer-email {
+      position: relative;
+      inset: auto;
+      grid-area: 1 / 2;
+      align-self: start;
+      justify-self: end;
+      white-space: nowrap;
+    }
+    body:has(.stage[data-view="hero"]) .footer-right { display: contents; }
+    body:has(.stage[data-view="hero"]) .footer-right > span {
+      grid-area: 3 / 2;
+      justify-self: end;
+      white-space: nowrap;
+    }
+    body:has(.stage[data-view="hero"]) .footer-copy {
+      grid-area: 5 / 2;
+      justify-self: end;
+      text-align: right;
+      white-space: nowrap;
+    }
+    body:has(.stage[data-view="hero"]) .footer-bio .desktop-bio-nowrap {
+      white-space: normal;
+    }
+  }
 }
