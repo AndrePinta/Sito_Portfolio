@@ -277,6 +277,7 @@ let contactTimer;
 let mobileExpandedProject = null;
 let mobileExpandedCard = null;
 let mobileCenterFrame;
+let stopMobilePanoramaHints;
 const cardArtwork = new WeakMap();
 const detailCopyObserver = new ResizeObserver((entries) => {
   detail.style.setProperty("--detail-copy-height", `${entries[0].target.getBoundingClientRect().height}px`);
@@ -461,6 +462,53 @@ window.addEventListener("wheel", () => {
   if (mobileLayout.matches) cancelAnimationFrame(mobileCenterFrame);
 }, { passive: true });
 
+function observeMobilePanoramas(section) {
+  const animations = new Map();
+  const stop = (figure, restore = false) => {
+    const frame = animations.get(figure);
+    if (frame === undefined) return;
+    cancelAnimationFrame(frame);
+    animations.delete(figure);
+    if (restore) figure.scrollLeft = 0;
+  };
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, isIntersecting }) => {
+      if (!isIntersecting) {
+        stop(target, true);
+        return;
+      }
+      if (reducedMotion.matches || target.scrollLeft > 1 || animations.has(target)) return;
+      const distance = Math.min(24, target.scrollWidth - target.clientWidth);
+      if (distance <= 1) return;
+      const start = performance.now();
+      const animate = (now) => {
+        if (reducedMotion.matches || !section.isConnected) {
+          stop(target, true);
+          return;
+        }
+        const progress = Math.min(1, (now - start) / 1400);
+        const phase = progress < .5 ? progress * 2 : (1 - progress) * 2;
+        target.scrollLeft = distance * (phase * phase * (3 - 2 * phase));
+        if (progress < 1) animations.set(target, requestAnimationFrame(animate));
+        else animations.delete(target);
+      };
+      animations.set(target, requestAnimationFrame(animate));
+    });
+  }, { rootMargin: "-10% 0px", threshold: 0 });
+  section.querySelectorAll(".mobile-overlay-figure.is-panoramic, .mobile-overlay-figure.is-scrollable")
+    .forEach((figure) => {
+      for (const event of ["pointerdown", "touchstart", "wheel", "keydown"]) {
+        figure.addEventListener(event, () => stop(figure), { passive: true });
+      }
+      observer.observe(figure);
+    });
+  return () => {
+    observer.disconnect();
+    animations.forEach((frame) => cancelAnimationFrame(frame));
+    animations.clear();
+  };
+}
+
 function openMobileProject(project, card) {
   if (!mobileLayout.matches) return;
   const bounds = card.getBoundingClientRect();
@@ -529,6 +577,7 @@ function openMobileProject(project, card) {
   card.setAttribute("aria-expanded", "true");
   card.setAttribute("aria-controls", expanded.id);
   card.after(expanded);
+  stopMobilePanoramaHints = observeMobilePanoramas(expanded);
   expanded.getBoundingClientRect();
   requestAnimationFrame(() => {
     if (mobileExpandedProject === expanded) expanded.classList.add("is-expanded");
@@ -544,6 +593,8 @@ function closeMobileProject({ immediate = false, onClosed } = {}) {
     return;
   }
   const expanded = mobileExpandedProject;
+  stopMobilePanoramaHints?.();
+  stopMobilePanoramaHints = null;
   mobileExpandedProject = null;
   expanded.removeAttribute("id");
   expanded.inert = true;
@@ -579,10 +630,8 @@ let heroLayoutFrame;
 function positionWideHeroTrack() {
   if (mobileLayout.matches || stage.dataset.view !== "hero"
       || getComputedStyle(stage).display === "flex") return;
-  const lines = [...caption.querySelectorAll(".caption-line")]
-    .filter((line) => getComputedStyle(line).display !== "none");
-  const captionBottom = parseFloat(getComputedStyle(caption).top)
-    + lines[lines.length - 1].getBoundingClientRect().bottom - caption.getBoundingClientRect().top;
+  const captionStyle = getComputedStyle(caption);
+  const captionBottom = parseFloat(captionStyle.top) + 3 * parseFloat(captionStyle.lineHeight);
   const bioTop = document.querySelector(".footer-bio").getBoundingClientRect().top;
   const trackHeight = track.getBoundingClientRect().height;
   const trackTop = (captionBottom + bioTop - trackHeight) / 2;
@@ -592,7 +641,10 @@ function positionWideHeroTrack() {
 function updateHeroLayout() {
   cancelAnimationFrame(heroLayoutFrame);
   heroLayoutFrame = requestAnimationFrame(() => {
-    if (mobileLayout.matches || stage.dataset.view !== "hero") return;
+    if (mobileLayout.matches || stage.dataset.view !== "hero") {
+      document.body.classList.remove("is-compact-hero", "is-footer-stacked");
+      return;
+    }
     heroContact.classList.remove("has-service-collision");
     const emailRight = heroContact.querySelector(".contact-email").getBoundingClientRect().right;
     const servicesLeft = heroContact.querySelector("p").getBoundingClientRect().left;
@@ -601,6 +653,44 @@ function updateHeroLayout() {
       ? parseFloat(getComputedStyle(heroContact).top) + heroContact.getBoundingClientRect().height + 24
       : 0;
     stage.style.setProperty("--hero-contact-clearance", `${clearance}px`);
+    const header = document.querySelector(".site-header").getBoundingClientRect();
+    const gutter = header.left;
+    const footerWidth = window.innerWidth - 2 * gutter;
+    const narrowAspect = matchMedia("(aspect-ratio < 16 / 9)").matches;
+    const emailLeft = gutter + footerWidth * (narrowAspect ? .44 : .5);
+    const emailWidth = document.querySelector(".footer-email").getBoundingClientRect().width;
+    const footerRight = document.querySelector(".footer-right");
+    const footerRightWidth = footerRight.querySelector("span").getBoundingClientRect().width
+      + footerRight.querySelector(".footer-copy").getBoundingClientRect().width
+      + parseFloat(getComputedStyle(footerRight).gap);
+    const bio = document.querySelector(".footer-bio").cloneNode(true);
+    bio.style.cssText = `position:fixed; visibility:hidden; left:${gutter}px; bottom:${gutter}px;
+      width:var(--desktop-bio-width); text-wrap:initial; margin:0;`;
+    bio.querySelectorAll(".desktop-bio-nowrap").forEach((span) => { span.style.whiteSpace = "nowrap"; });
+    document.body.append(bio);
+    const bioBounds = bio.getBoundingClientRect();
+    bio.remove();
+    const stackFooter = emailLeft + emailWidth + 16 > window.innerWidth - gutter - footerRightWidth
+      || bioBounds.right + 16 > emailLeft;
+    const captionStyle = getComputedStyle(caption);
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    context.font = captionStyle.font;
+    const captionWidth = footerWidth - 16;
+    const captionOverflows = englishProjects.some((project) => {
+      const translation = italianProjects[project.slug];
+      return [project.desktopOverviewSubtitle || project.subtitle,
+        translation.desktopOverviewSubtitle || translation.subtitle,
+        project.credits, translation.credits]
+        .some((value) => context.measureText(value).width > captionWidth);
+    });
+    const captionTop = window.innerHeight * .4;
+    const captionBottom = captionTop + 3 * parseFloat(captionStyle.lineHeight);
+    const compact = stackFooter || captionOverflows
+      || captionTop < Math.max(header.bottom + 24, clearance)
+      || bioBounds.top - captionBottom - track.getBoundingClientRect().height < 48;
+    document.body.classList.toggle("is-footer-stacked", stackFooter);
+    document.body.classList.toggle("is-compact-hero", compact);
     positionWideHeroTrack();
   });
 }
@@ -1205,6 +1295,7 @@ window.addEventListener("resize", () => {
 document.fonts.ready.then(updateHeroLayout);
 const heroLayoutObserver = new ResizeObserver(positionWideHeroTrack);
 heroLayoutObserver.observe(track);
+heroLayoutObserver.observe(stage);
 heroLayoutObserver.observe(document.querySelector(".footer-bio"));
 
 document.addEventListener("keydown", (event) => {

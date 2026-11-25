@@ -2,7 +2,7 @@
 
 Static portfolio built with HTML, CSS and JavaScript. Project images and videos are served from the public Cloudflare R2 custom domain `mediaz.andreapintauro.com`; the copies in `assets/media/` are local fallbacks.
 
-The desktop navigation logo uses `Risorsa 5.svg` from R2 with a local fallback; mobile logos are unchanged. The wide desktop browse-all layout retains its original caption position, centered project row and bottom-aligned footer. At widths up to 1200px or heights up to 800px, desktop uses normal document flow with 72px around the project row, consuming the empty upper space before scrolling. The compact footer separates the bio from a right-aligned email, type credit and copyright with equal vertical gaps. Mobile retains the contact heading and email above the SVG bio header.
+The desktop navigation logo uses `Risorsa 5.svg` from R2 with a local fallback; mobile logos are unchanged. The wide desktop browse-all layout reserves three caption lines when centering the project row, keeping it stationary as captions change. When available width or height requires it, desktop uses normal document flow with reserved caption space and 72px around the project row; footer items stack only when their horizontal space is insufficient. In the desktop project list, the email sits above the bio, clear of the scrolling artwork. Mobile retains the contact heading and email above the SVG bio header, and horizontally scrollable panoramas offer a brief motion hint when entering view unless reduced motion is enabled.
 
 ## Development
 

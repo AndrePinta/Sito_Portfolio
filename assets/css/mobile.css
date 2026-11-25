@@ -286,14 +286,13 @@
   .footer-right { display: flex; justify-content: center; margin-top: 8vh; }
   .footer-right > span { display: none; }
   .footer-bio, .footer-copy { font-size: calc(var(--small) + 4pt); }
-  .mobile-footer-heading, .footer-email { font-size: calc((100vw - 2 * var(--gutter)) / 28.84); }
+  .mobile-footer-heading, .footer-email { font-size: calc(var(--small) + 4pt); }
   .footer-email { white-space: nowrap; }
   .mobile-footer-heading { order: -3; }
   .mobile-bio-header { order: -1; }
   .footer-email {
     order: -2;
     margin-bottom: 28px;
-    font-size: calc((100vw - 2 * var(--gutter)) / 28.84 * 1.1);
   }
   .stage[data-view="hero"] .caption,
   .stage[data-view="list"] .caption { display: none; }
@@ -467,11 +466,17 @@
     overscroll-behavior-x: contain;
   }
   .mobile-overlay-figure.is-panoramic img { max-width: none; }
+  .mobile-expanded-project[data-project="dish-list"] .mobile-overlay-figure.is-panoramic {
+    padding-top: 2vw;
+  }
   .mobile-expanded-project[data-project="dish-list"] .mobile-overlay-figure.is-panoramic img {
     width: 288%;
   }
   .mobile-expanded-project[data-project="entre-panes"] .mobile-overlay-figure.is-panoramic img {
     width: 288%;
+  }
+  .mobile-expanded-project[data-project="food-route"] .mobile-overlay-figure.is-panoramic img {
+    width: 306%;
   }
   .mobile-expanded-project[data-project="serenissima"] .mobile-overlay-figure.is-panoramic img {
     width: 269%;
